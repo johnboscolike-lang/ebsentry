@@ -1,0 +1,18 @@
+[Unit]
+Description=김포과기고 EBS 자기주도학습실 입반 신청
+After=network.target
+
+[Service]
+Type=simple
+User=ebs
+Group=ebs
+WorkingDirectory=/opt/ebs-apply
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/ebs-apply.env
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning server/src/index.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

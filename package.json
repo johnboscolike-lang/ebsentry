@@ -1,0 +1,24 @@
+{
+  "name": "ebs-apply",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "김포과기고 EBS 자기주도학습실 입반 신청",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run typecheck -w client && npm run build -w client",
+    "start": "npm run start -w server",
+    "test": "npm run build && npm run test -w server",
+    "typecheck": "npm run typecheck -w client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
