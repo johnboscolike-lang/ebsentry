@@ -5,7 +5,7 @@ export function ApplyPage() {
   return (
     <>
       <Backdrop />
-      <div className="shell">
+      <div className="shell shell-apply">
         <Header />
         <Wizard />
         <Footer />

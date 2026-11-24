@@ -3,6 +3,7 @@ import { departmentForClass, pruneSlots } from '@shared/domain.js';
 import { firstInvalidStep, validateApplication, validateStep } from '@shared/validate.js';
 import { submitApplication } from '../api';
 import { initialForm, type Department, type FormState } from '../types';
+import { RecruitmentNotice } from './RecruitmentNotice';
 import { Success } from './Success';
 import { cx } from './ui';
 import { StepAcademy } from './steps/StepAcademy';
@@ -130,7 +131,7 @@ export function Wizard() {
     setStep(nextStep);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     requestAnimationFrame(() => {
-      document.getElementById('step-title')?.focus();
+      document.getElementById('step-title')?.focus({ preventScroll: true });
     });
   }
 
@@ -179,26 +180,28 @@ export function Wizard() {
 
   const meta = STEPS[step];
   return (
-    <form
-      className="wizard"
-      data-testid="wizard"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (busy) return;
-        if (step < 7) {
-          const found = validateStep(step, form);
-          if (Object.keys(found).length) {
-            setErrors(found);
-            revealErrors();
+    <>
+      {step === 0 && <RecruitmentNotice />}
+      <form
+        className="wizard"
+        data-testid="wizard"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (busy) return;
+          if (step < 7) {
+            const found = validateStep(step, form);
+            if (Object.keys(found).length) {
+              setErrors(found);
+              revealErrors();
+              return;
+            }
+            setErrors({});
+            go(step + 1);
             return;
           }
-          setErrors({});
-          go(step + 1);
-          return;
-        }
-        void submit();
-      }}
-    >
+          void submit();
+        }}
+      >
       <div
         className="progress"
         role="progressbar"
@@ -250,6 +253,7 @@ export function Wizard() {
         </button>
       </div>
       <p className="draft-note">작성 중인 내용은 이 브라우저 탭에만 임시 저장됩니다.</p>
-    </form>
+      </form>
+    </>
   );
 }
